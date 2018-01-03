@@ -558,7 +558,7 @@ public class TipeFilter extends AbstractFilter {
     @Override
     public Instance[] getDefaultInstances() {
         return new Instance[] {
-                new Instance("*.tipe", "*", "*"),
+                new Instance("*.tip", "*", "*"),
         };
     }
 
