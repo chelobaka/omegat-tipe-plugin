@@ -39,6 +39,8 @@ import java.util.stream.Stream;
 import org.jetbrains.annotations.NotNull;
 import org.omegat.core.Core;
 
+import org.omegat.core.CoreEvents;
+import org.omegat.core.events.IApplicationEventListener;
 import org.omegat.filters2.AbstractFilter;
 import org.omegat.filters2.FilterContext;
 import org.omegat.filters2.Instance;
@@ -52,7 +54,7 @@ import org.omegat.util.LinebreakPreservingReader;
  */
 public class TipeFilter extends AbstractFilter {
 
-    private static final String FILTER_NAME = "tipe³ web authoring format";
+    static final String FILTER_NAME = "tipe³ web authoring format";
 
     private static final Pattern ATOMIC_PATTERN =
             Pattern.compile("^\\s+|\\{\\{IMG.+?}}\\s*|\\n\\s*");
@@ -524,11 +526,29 @@ public class TipeFilter extends AbstractFilter {
         }
     }
 
+    private static IApplicationEventListener generateIApplicationEventListener() {
+        return new IApplicationEventListener() {
+
+            private static final int MENU_PRIORITY = 100;
+
+            @Override
+            public void onApplicationStartup() {
+                Core.getEditor().registerPopupMenuConstructors(MENU_PRIORITY,
+                        new TipePopupMenuConstructor());
+            }
+
+            @Override
+            public void onApplicationShutdown() {
+            }
+        };
+    }
+
     /**
      * Plugin loader.
      */
     public static void loadPlugins() {
         Core.registerFilterClass(TipeFilter.class);
+        CoreEvents.registerApplicationEventListener(generateIApplicationEventListener());
     }
 
     /**
