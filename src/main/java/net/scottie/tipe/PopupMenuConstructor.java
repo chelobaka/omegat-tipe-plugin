@@ -22,8 +22,6 @@
 package net.scottie.tipe;
 
 import org.omegat.core.Core;
-import org.omegat.core.data.IProject;
-import org.omegat.gui.editor.IEditor;
 import org.omegat.gui.editor.IPopupMenuConstructor;
 import org.omegat.gui.editor.SegmentBuilder;
 
@@ -36,58 +34,23 @@ import java.util.Map;
 /**
  * Editor popup menu constructor.
  */
-public class TipePopupMenuConstructor implements IPopupMenuConstructor {
-    private final ResourceBundle rb;
-    private final IEditor editor = Core.getEditor();
-
-    /**
-     * Constructor.
-     */
-    public TipePopupMenuConstructor() {
-        ResourceBundle.Control utf8Control = new UTF8Control();
-        rb = ResourceBundle.getBundle("TipeStrings", Locale.getDefault(), utf8Control);
-    }
-
-    /**
-     * Check if current file is supported by filter.
-     * @return check result
-     */
-    private static boolean isSupportedFile() {
-        String filePath = Core.getEditor().getCurrentFile();
-        if (filePath == null) {
-            return false;
-        }
-        for (IProject.FileInfo fi : Core.getProject().getProjectFiles()) {
-            if (fi.filePath.equals(filePath)
-                    && fi.filterFileFormatName.equals(TipeFilter.FILTER_NAME)) {
-                return true;
-            }
-        }
-        return false;
-    }
+public class PopupMenuConstructor implements IPopupMenuConstructor {
 
     /**
      * Wrap around selected text (if any) into a given tag.
      * @param tagName
      * @return formatted string
      */
-    private String createExtraTag(final String tagName) {
-        String selectedText = editor.getSelectedText();
+    private static String createExtraTag(final String tagName) {
+        String selectedText = Core.getEditor().getSelectedText();
         if (selectedText == null) {
             selectedText = "";
         }
-
         return String.format("<%s>%s</%s>", tagName, selectedText, tagName);
     }
 
     /**
      * Add new items to popup menu.
-     * @param menu parent menu
-     * @param comp nevermind
-     * @param mousepos nevermind
-     * @param isInActiveEntry nevermind
-     * @param isInActiveTranslation nevermind
-     * @param sb nevermind
      */
     public void addItems(final JPopupMenu menu,
                          final JTextComponent comp,

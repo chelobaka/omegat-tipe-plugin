@@ -539,7 +539,7 @@ public class TipeFilter extends AbstractFilter {
             @Override
             public void onApplicationStartup() {
                 Core.getEditor().registerPopupMenuConstructors(MENU_PRIORITY,
-                        new TipePopupMenuConstructor());
+                        new PopupMenuConstructor());
             }
 
             @Override
