@@ -209,6 +209,11 @@ public class TipeFilter extends AbstractFilter {
 
     /* End of private fields */
 
+    // Register marker
+    static {
+         Core.registerMarker(new HTMLTagMarker());
+    }
+
     /**
      * Constructor.
      */
