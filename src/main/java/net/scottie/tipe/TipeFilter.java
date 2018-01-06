@@ -46,7 +46,6 @@ import org.omegat.filters2.FilterContext;
 import org.omegat.filters2.Instance;
 import org.omegat.util.LinebreakPreservingReader;
 
-
 /**
  * tipe³ web authoring format filter for OmegaT.
  *
