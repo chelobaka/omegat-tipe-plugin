@@ -37,7 +37,7 @@ public class TipeFilterTest extends TestFilterBase {
 
     @Test
     public void testTextFilterParsing() throws Exception {
-        List<String> entries = parse(new TipeFilter(), "/filters/tipe/test.tipe");
+        List<String> entries = parse(new TipeFilter(), "/filters/tipe/test.tip");
         int i = 0;
         assertEquals("Title text", entries.get(i++));
         assertEquals("Strong text and <e1>strong italic text</e1>", entries.get(i++));
@@ -52,6 +52,6 @@ public class TipeFilterTest extends TestFilterBase {
 
     @Test
     public void testTranslate() throws Exception {
-        translateText(new TipeFilter(), "/filters/tipe/test.tipe");
+        translateText(new TipeFilter(), "/filters/tipe/test.tip");
     }
 }
