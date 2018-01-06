@@ -54,7 +54,7 @@ import org.omegat.util.LinebreakPreservingReader;
  */
 public class TipeFilter extends AbstractFilter {
 
-    static final String FILTER_NAME = "tipe³ web authoring format";
+    // private static boolean markerRegistered = false;
 
     private static final Pattern ATOMIC_PATTERN =
             Pattern.compile("^\\s+|\\{\\{IMG.+?}}\\s*|\\n\\s*");
@@ -558,7 +558,7 @@ public class TipeFilter extends AbstractFilter {
 
     @Override
     public String getFileFormatName() {
-        return FILTER_NAME;
+        return Util.FILTER_NAME;
     }
 
     @Override
@@ -574,7 +574,7 @@ public class TipeFilter extends AbstractFilter {
     @Override
     public Instance[] getDefaultInstances() {
         return new Instance[] {
-                new Instance("*.tip", "*", "*"),
+                new Instance(Util.SOURCE_FILENAME_MASK, "*", "*"),
         };
     }
 

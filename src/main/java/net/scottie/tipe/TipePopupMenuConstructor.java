@@ -31,8 +31,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.text.JTextComponent;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.Map;
 
 /**
  * Editor popup menu constructor.
@@ -97,20 +96,21 @@ public class TipePopupMenuConstructor implements IPopupMenuConstructor {
                          final boolean isInActiveTranslation,
                          final SegmentBuilder sb) {
 
-        if (!isSupportedFile()) {
+        if (!Util.isTipeFile()) {
             return;
         }
 
         JMenu pluginSubMenu = new JMenu();
-        pluginSubMenu.setText(rb.getString("POPUP_MENU_NAME"));
-        JMenuItem item = new JMenuItem();
-        item.setText(rb.getString("POPUP_MENU_FORMAT_STRONG"));
-        item.addActionListener(e -> Core.getEditor().insertText(createExtraTag("strong")));
-        pluginSubMenu.add(item);
-        item = new JMenuItem();
-        item.setText(rb.getString("POPUP_MENU_FORMAT_EMPHASIS"));
-        item.addActionListener(e -> Core.getEditor().insertText(createExtraTag("em")));
-        pluginSubMenu.add(item);
+        pluginSubMenu.setText(Util.RESOURCE_BUNDLE.getString("POPUP_MENU_NAME"));
+
+        for (Map.Entry<String, String> entry : Util.TAG_MAP.entrySet()) {
+            JMenuItem item = new JMenuItem();
+            item.setText(Util.RESOURCE_BUNDLE.getString(entry.getValue()));
+            String insertion = createExtraTag(entry.getKey());
+            item.addActionListener(e -> Core.getEditor().insertText(insertion));
+            pluginSubMenu.add(item);
+        }
+
         menu.addSeparator();
         menu.add(pluginSubMenu);
         menu.addSeparator();
