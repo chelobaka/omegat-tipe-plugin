@@ -452,6 +452,11 @@ public class TipeFilter extends AbstractFilter {
             if (((HTMLTag) leftBlock).getPair() != rightBlock) {
                 break;
             }
+            // Do not strip <a> tags since they contain href used in comment
+            if (((HTMLTag) leftBlock).getName().equals("a")) {
+                break;
+            }
+
             blocks.remove(0);
             blocks.remove(blocks.size() - 1);
         }
