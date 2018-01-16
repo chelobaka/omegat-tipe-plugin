@@ -53,8 +53,6 @@ import org.omegat.util.LinebreakPreservingReader;
  */
 public class TipeFilter extends AbstractFilter {
 
-    // private static boolean markerRegistered = false;
-
     private static final Pattern ATOMIC_PATTERN =
             Pattern.compile("^\\s+|\\{\\{IMG.+?}}\\s*|\\n\\s*");
 
