@@ -56,6 +56,8 @@ public class TipeFilter extends AbstractFilter {
     private static final Pattern ATOMIC_PATTERN =
             Pattern.compile("^\\s+|\\{\\{IMG.+?}}\\s*|\\n\\s*");
 
+    private static final Pattern HREF_PATTERN = Pattern.compile("href=\"(.+?)\"");
+
     // Text formatting HTML tags
     private static final String[] FORMATTING_TAG_NAMES = {
         "strong",
@@ -146,6 +148,9 @@ public class TipeFilter extends AbstractFilter {
         private final String name;
         private final TagType tagType;
         private String metaBody;
+        // Tag comment would be sent inside entry comment to OmegaT.
+        // The purpose of this is passing HREF links to the editor.
+        private String comment;
         private HTMLTag pair;
 
         String getMetaBody() {
@@ -180,12 +185,21 @@ public class TipeFilter extends AbstractFilter {
             this.pair = pair;
         }
 
+        String getComment() {
+            return comment;
+        }
+
+        void setComment(String comment) {
+            this.comment = comment;
+        }
+
         HTMLTag(final String name, final int start, final int end, final TagType tagType) {
             super(BlockType.TAG, start, end);
             this.name = name;
             this.tagType = tagType;
             metaBody = null;
             pair = null;
+            comment = null;
         }
     }
 
@@ -305,6 +319,15 @@ public class TipeFilter extends AbstractFilter {
             metaBody = String.format(tagFormat, metaNameChar, metaCounter);
         }
         tag.setMetaBody(metaBody);
+
+        // Extract href attribute for anchor tags and store it as comment
+        if (tag.getName().equals("a")) {
+            Matcher matcher = HREF_PATTERN.matcher(tagBody);
+            if (matcher.find()) {
+                tag.setComment(matcher.group(1));
+            }
+        }
+
         metaToHtmlMap.put(metaBody, tagBody);
         htmlToMetaMap.put(tagBody, metaBody);
 
@@ -446,14 +469,23 @@ public class TipeFilter extends AbstractFilter {
 
         Set<String> scopeMetaBodies = new HashSet<>();
 
+        StringBuilder commentBuilder = new StringBuilder();
+
         // Build string for translation
         StringBuilder translationBuilder = new StringBuilder();
         for (Block block : blocks) {
             switch (block.getType()) {
                 case TAG:
-                    String metaBody = ((HTMLTag) block).getMetaBody();
+                    HTMLTag tag = (HTMLTag) block;
+                    String metaBody = tag.getMetaBody();
                     translationBuilder.append(metaBody);
                     scopeMetaBodies.add(metaBody);
+                    if (tag.getComment() != null) {
+                        commentBuilder.append(tag.metaBody);
+                        commentBuilder.append(": ");
+                        commentBuilder.append(tag.getComment());
+                        commentBuilder.append("\n");
+                    }
                     break;
                 case PAYLOAD:
                     translationBuilder.append(doc.substring(block.getStart(), block.getEnd()));
@@ -470,8 +502,11 @@ public class TipeFilter extends AbstractFilter {
             translation = translation.replaceAll(subst[0], subst[1]);
         }
 
+        // Check if we have any comments
+        String comment = commentBuilder.length() > 0 ? commentBuilder.toString() : null;
+
         // Fetch actual translation
-        translation = processEntry(translation);
+        translation = processEntry(translation, comment);
 
         // Put back special HTML characters
         for (String[] subst : SPECIAL_HTML_CHARACTERS) {
