@@ -43,7 +43,7 @@ public class TipeFilterTest extends TestFilterBase {
         assertEquals("Strong text and <e1>strong italic text</e1>", entries.get(i++));
         assertEquals("Block quote level 1", entries.get(i++));
         assertEquals("Block quote level 2", entries.get(i++));
-        assertEquals("Table text 1", entries.get(i++));
+        assertEquals("<a1>Table text 1</a1>", entries.get(i++));
         assertEquals("Table text 2", entries.get(i++));
         assertEquals("list item 1", entries.get(i++));
         assertEquals("<a2>Link</a2> (description)", entries.get(i++));
