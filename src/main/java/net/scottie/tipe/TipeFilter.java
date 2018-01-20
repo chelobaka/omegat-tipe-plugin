@@ -24,13 +24,7 @@ package net.scottie.tipe;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -471,8 +465,8 @@ public class TipeFilter extends AbstractFilter {
         }
 
         Set<String> scopeMetaBodies = new HashSet<>();
-
         StringBuilder commentBuilder = new StringBuilder();
+        Map<String, String> anchorTagHrefs = new LinkedHashMap<>();
 
         // Build string for translation
         StringBuilder translationBuilder = new StringBuilder();
@@ -484,10 +478,13 @@ public class TipeFilter extends AbstractFilter {
                     translationBuilder.append(metaBody);
                     scopeMetaBodies.add(metaBody);
                     if (tag.getComment() != null) {
+                        // Append tag name and its href to comment
                         commentBuilder.append(tag.metaBody);
                         commentBuilder.append(": ");
                         commentBuilder.append(tag.getComment());
                         commentBuilder.append("\n");
+                        // Store tag name / href pair for translation
+                        anchorTagHrefs.put(tag.metaBody, tag.getComment());
                     }
                     break;
                 case PAYLOAD:
@@ -521,6 +518,16 @@ public class TipeFilter extends AbstractFilter {
             translation = translation.replaceAll(meta, metaToHtmlMap.get(meta));
         }
 
+        // Translate anchor hrefs and replace them in translated string
+        for (Map.Entry<String, String> hrefEntry : anchorTagHrefs.entrySet()) {
+            String originalHref = hrefEntry.getValue();
+            String metaTag = hrefEntry.getKey();
+            String translatedHref = processEntry(originalHref,
+                    String.format("%s %s", Util.RESOURCE_BUNDLE.getString("HYPERLINK_FOR"), metaTag));
+            translation = translation.replaceAll(wrapWithHref(originalHref),
+                    wrapWithHref(translatedHref));
+        }
+
         // Append translation to result
         resultBuilder.append(translation);
 
@@ -530,6 +537,15 @@ public class TipeFilter extends AbstractFilter {
         }
 
         return resultBuilder.toString();
+    }
+
+    /**
+     * Wrap URL with href attribute to avoid translation corruption due to bad URLs.
+     * @param url
+     * @return
+     */
+    private static String wrapWithHref(String url) {
+        return String.format("href=\"%s\"", url);
     }
 
     /**
