@@ -339,8 +339,6 @@ public class TipeFilter extends AbstractFilter {
             pair.setMetaBody(pairMetaBody);
             metaToHtmlMap.put(pairMetaBody, pairBody);
         }
-
-        //assert (!tag.hasMetaBody());
     }
 
     /**
