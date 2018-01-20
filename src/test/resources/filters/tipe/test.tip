@@ -11,10 +11,10 @@
 </blockquote>
 </blockquote>
 
-<table><tbody><tr><td><a href="http://url1">Table text 1</a></td></tr><tr><td>Table text 2</td></tr></tbody></table>
+<table><tbody><tr><td><a href="http://url1.net">Table text 1</a></td></tr><tr><td>Table text 2</td></tr></tbody></table>
 
 {{IMG|324981|d57842_4a41ce443f294fad8fac4fd.jpg|supersize|center}}
 
-<ul> <li>list item 1</li> <li><a href="https://url3">Link</a> (description)</li> </ul>
+<ul> <li>list item 1</li> <li><a href="https://url2.org">Link</a> (description)</li> </ul>
 
 <em><em>Bad tags <sup>here</sub></em>

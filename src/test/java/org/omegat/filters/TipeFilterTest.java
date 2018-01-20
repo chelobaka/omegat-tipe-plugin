@@ -44,9 +44,11 @@ public class TipeFilterTest extends TestFilterBase {
         assertEquals("Block quote level 1", entries.get(i++));
         assertEquals("Block quote level 2", entries.get(i++));
         assertEquals("<a1>Table text 1</a1>", entries.get(i++));
+        assertEquals("http://url1.net", entries.get(i++));
         assertEquals("Table text 2", entries.get(i++));
         assertEquals("list item 1", entries.get(i++));
         assertEquals("<a2>Link</a2> (description)", entries.get(i++));
+        assertEquals("https://url2.org", entries.get(i++));
         assertEquals("<e2><e2>Bad tags <s3>here</s4></e2>", entries.get(i++));
     }
 
