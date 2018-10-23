@@ -33,13 +33,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -48,12 +42,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 
 import org.omegat.core.Core;
-import org.omegat.core.data.EntryKey;
-import org.omegat.core.data.IProject;
-import org.omegat.core.data.ProjectProperties;
-import org.omegat.core.data.ProtectedPart;
-import org.omegat.core.data.RealProject;
-import org.omegat.core.data.SourceTextEntry;
+import org.omegat.core.data.*;
 import org.omegat.filters2.AbstractFilter;
 import org.omegat.filters2.FilterContext;
 import org.omegat.filters2.IAlignCallback;
@@ -408,8 +397,9 @@ abstract class TestFilterBase {
 
             Set<String> existSource = new HashSet<String>();
             Set<EntryKey> existKeys = new HashSet<EntryKey>();
+            Map<String, ExternalTMX> externalTms = new HashMap<>();
 
-            LoadFilesCallback loadFilesCallback = new LoadFilesCallback(existSource, existKeys);
+            LoadFilesCallback loadFilesCallback = new LoadFilesCallback(existSource, existKeys, externalTms);
 
             FileInfo fi = new FileInfo();
             fi.filePath = file;
