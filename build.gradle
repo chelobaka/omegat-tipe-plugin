@@ -57,25 +57,30 @@ jar {
     }
 }
 
+/* Checkstyle */
 checkstyle {
     config = resources.text.fromFile("${rootProject.projectDir}/config/checkstyle/checkstyle.xml")
     ignoreFailures = true
     toolVersion = '7.1'
+    sourceSets = [project.sourceSets.main]
 }
 tasks.checkstyleMain.setGroup('Verification')
+tasks.remove(tasks['checkstyleTest'])
 
-// Treat findbugs failure as warning
+/* FindBugs */
 findbugs {
     ignoreFailures = true
+    sourceSets = [project.sourceSets.main]
 }
 
-findbugsMain {
+tasks.withType(FindBugs) {
     setGroup('Verification')
     reports {
         xml.enabled = false
         html.enabled = true
     }
 }
+tasks.remove(tasks['findbugsTest'])
 
 artifacts {
     archives jar
