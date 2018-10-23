@@ -38,7 +38,7 @@ public class PopupMenuConstructor implements IPopupMenuConstructor {
 
     /**
      * Wrap around selected text (if any) into a given tag.
-     * @param tagName
+     * @param tagName tag name
      * @return formatted string
      */
     private static String createExtraTag(final String tagName) {
@@ -50,14 +50,20 @@ public class PopupMenuConstructor implements IPopupMenuConstructor {
     }
 
     /**
-     * Add new items to popup menu.
+     * Add items to popup menu.
+     * @param menu menu
+     * @param comp text component
+     * @param mousepos mouse position
+     * @param isInActiveEntry is in active entry?
+     * @param isInActiveTranslation is in active translation?
+     * @param sb segment builder
      */
     public void addItems(final JPopupMenu menu,
-                         final JTextComponent comp,
-                         final int mousepos,
-                         final boolean isInActiveEntry,
-                         final boolean isInActiveTranslation,
-                         final SegmentBuilder sb) {
+                          final JTextComponent comp,
+                          final int mousepos,
+                          final boolean isInActiveEntry,
+                          final boolean isInActiveTranslation,
+                          final SegmentBuilder sb) {
 
         if (!Util.isTipeFile()) {
             return;

@@ -24,7 +24,14 @@ package net.scottie.tipe;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -183,7 +190,7 @@ public class TipeFilter extends AbstractFilter {
             return comment;
         }
 
-        void setComment(String comment) {
+        void setComment(final String comment) {
             this.comment = comment;
         }
 
@@ -302,7 +309,13 @@ public class TipeFilter extends AbstractFilter {
         if (metaBody == null || !tag.hasPair()) {
             Character metaNameChar = tag.getName().charAt(0);
             Integer metaCounter = metaCounters.get(metaNameChar);
-            metaCounter = (metaCounter == null) ? 1 : metaCounter + 1;
+
+            if (metaCounter == null) {
+                metaCounter = 1;
+            } else {
+                metaCounter += 1;
+            }
+
             metaCounters.put(metaNameChar, metaCounter);
             String tagFormat;
             if (tag.isOpening()) {
@@ -503,7 +516,12 @@ public class TipeFilter extends AbstractFilter {
         }
 
         // Check if we have any comments
-        String comment = commentBuilder.length() > 0 ? commentBuilder.toString() : null;
+        String comment;
+        if (commentBuilder.length() > 0) {
+            comment = commentBuilder.toString();
+        } else {
+            comment = null;
+        }
 
         // Fetch actual translation
         translation = processEntry(translation, comment);
@@ -523,7 +541,8 @@ public class TipeFilter extends AbstractFilter {
             String originalHref = hrefEntry.getValue();
             String metaTag = hrefEntry.getKey();
             String translatedHref = processEntry(originalHref,
-                    String.format("%s %s", Util.RESOURCE_BUNDLE.getString("HYPERLINK_FOR"), metaTag));
+                    String.format("%s %s",
+                            Util.RESOURCE_BUNDLE.getString("HYPERLINK_FOR"), metaTag));
             translation = translation.replaceAll(wrapWithHref(originalHref),
                     wrapWithHref(translatedHref));
         }
@@ -544,7 +563,7 @@ public class TipeFilter extends AbstractFilter {
      * @param url
      * @return
      */
-    private static String wrapWithHref(String url) {
+    private static String wrapWithHref(final String url) {
         return String.format("href=\"%s\"", url);
     }
 

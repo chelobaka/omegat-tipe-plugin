@@ -31,24 +31,24 @@ import java.util.ResourceBundle;
 
 
 /**
- * Common utility stuff
+ * Common utility stuff.
  */
-class Util {
+final class Util {
 
-    final static String SOURCE_FILENAME_MASK  = "*.tip";
+    static final String SOURCE_FILENAME_MASK  = "*.tip";
 
     // Resource bundle
-    final static ResourceBundle RESOURCE_BUNDLE;
+    static final ResourceBundle RESOURCE_BUNDLE;
     static {
         ResourceBundle.Control utf8Control = new UTF8Control();
         RESOURCE_BUNDLE = ResourceBundle.getBundle("TipeStrings", Locale.getDefault(), utf8Control);
     }
 
     // Filter name for OmegaT
-    final static String FILTER_NAME = RESOURCE_BUNDLE.getString("FILTER_NAME");
+    static final String FILTER_NAME = RESOURCE_BUNDLE.getString("FILTER_NAME");
 
     // Tag names with corresponding resource bundle strings
-    final static Map<String, String> TAG_MAP = new LinkedHashMap<>();
+    static final Map<String, String> TAG_MAP = new LinkedHashMap<>();
     static {
         TAG_MAP.put("strong", "FORMAT_STRONG");
         TAG_MAP.put("em", "FORMAT_EMPHASIS");
@@ -72,5 +72,9 @@ class Util {
             }
         }
         return false;
+    }
+
+    private Util() {
+        // Disable instance creation.
     }
 }

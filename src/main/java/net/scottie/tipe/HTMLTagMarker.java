@@ -27,27 +27,32 @@ import org.omegat.gui.editor.mark.Mark;
 import org.omegat.util.gui.Styles;
 
 import javax.swing.text.AttributeSet;
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
+/**
+ * Marker of HTML tags.
+ */
 class HTMLTagMarker implements IMarker {
 
-    private final static Color TAG_FONT_COLOR = new Color(36, 163,11);
+    private static final Color TAG_FONT_COLOR = new Color(36, 163, 11);
 
     private static final AttributeSet ATTRIBUTES = Styles
             .createAttributeSet(TAG_FONT_COLOR, null, null, null);
 
     // Build pattern for extra HTML elements to be highlighted
-    private final static Pattern HTML_TAG_PATTERN;
+    private static final Pattern HTML_TAG_PATTERN;
     static {
         String patternString = "</?(" + String.join("|", Util.TAG_MAP.keySet()) + ")>";
         HTML_TAG_PATTERN = Pattern.compile(patternString);
     }
 
-    public List<Mark> getMarksForEntry(SourceTextEntry ste, String sourceText, String translationText, boolean isActive)
+    public List<Mark> getMarksForEntry(final SourceTextEntry ste, final String sourceText,
+                                       final String translationText, final boolean isActive)
             throws Exception {
 
         if (translationText == null || !Util.isTipeFile()) {

@@ -34,12 +34,23 @@ import java.util.ResourceBundle;
  * UTF8 capable resource bundle control.
  */
 public class UTF8Control extends ResourceBundle.Control {
+
+    /**
+     * Create new bundle.
+     * @param baseName base name
+     * @param locale locale
+     * @param format format
+     * @param loader class loader
+     * @param reload do reload?
+     * @return new bundle
+     * @throws IOException file access error
+     */
     public ResourceBundle newBundle(final String baseName,
                                     final Locale locale,
                                     final String format,
                                     final ClassLoader loader,
                                     final boolean reload)
-            throws IllegalAccessException, InstantiationException, IOException {
+            throws IOException {
         // The below is a copy of the default implementation.
         String bundleName = toBundleName(baseName, locale);
         String resourceName = toResourceName(bundleName, "properties");
