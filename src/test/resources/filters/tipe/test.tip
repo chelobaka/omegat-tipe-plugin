@@ -17,4 +17,9 @@
 
 <ul> <li>list item 1</li> <li><a href="https://url2.org">Link</a> (description)</li> </ul>
 
-<em><em>Bad tags <sup>here</sub></em>
+<span class="BoldGrey">
+<em>This must collapse to one <sup>
+string
+</sup>
+</em>
+</span>

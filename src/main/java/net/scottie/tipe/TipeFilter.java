@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +47,7 @@ import org.omegat.filters2.AbstractFilter;
 import org.omegat.filters2.FilterContext;
 import org.omegat.filters2.Instance;
 import org.omegat.util.LinebreakPreservingReader;
+import org.omegat.util.Log;
 
 /**
  * tipe³ web authoring format filter for OmegaT.
@@ -53,6 +55,8 @@ import org.omegat.util.LinebreakPreservingReader;
  * @author Lev Abashkin
  */
 public class TipeFilter extends AbstractFilter {
+
+    private static final Pattern BLANK_PATTERN = Pattern.compile("^[\\s\\n]+$");
 
     private static final Pattern ATOMIC_PATTERN =
             Pattern.compile("^\\s+|\\{\\{IMG.+?}}\\s*|\\n\\s*");
@@ -176,6 +180,10 @@ public class TipeFilter extends AbstractFilter {
 
         boolean isOpening() {
             return tagType == TagType.OPENING;
+        }
+
+        TagType getTagType() {
+            return tagType;
         }
 
         void setMetaBody(final String metaBody) {
@@ -434,6 +442,34 @@ public class TipeFilter extends AbstractFilter {
         // Add found payload blocks to document blocks
         documentBlocks.addAll(blockCache);
         Collections.sort(documentBlocks);
+
+        // Remove atomic blocks (newlines) between opening and closing tags
+        int formattingDepth = 0;
+        Iterator<Block> iter = documentBlocks.iterator();
+        while (iter.hasNext()) {
+            Block block = iter.next();
+            switch (block.getType()) {
+                case TAG:
+                    TagType tt = ((HTMLTag) block).getTagType();
+                    if (tt == TagType.OPENING) {
+                        formattingDepth++;
+                    } else if (tt == TagType.CLOSING) {
+                        formattingDepth--;
+                    }
+                    break;
+                case ATOMIC:
+                    if (formattingDepth > 0 && block.end - block.start > 0) {
+                        Matcher m = BLANK_PATTERN.matcher(doc.substring(block.start, block.end));
+                        if (m.matches()) {
+                            iter.remove();
+                        }
+                    }
+            }
+        }
+
+        if (formattingDepth != 0) {
+            Log.log("WARNING: Tipe³ filter detected bad HTML formatting. Check your source document");
+        }
     }
 
     /**
@@ -655,7 +691,7 @@ public class TipeFilter extends AbstractFilter {
 
     @Override
     protected boolean requirePrevNextFields() {
-        return false;
+        return true;
     }
 
     @Override

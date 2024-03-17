@@ -7,9 +7,10 @@ plugins {
 }
 
 def pluginName = 'Tipe³ format support'
+def pluginAuthor = 'Lev Abashkin'
 
 // Project version
-version = 0.5
+version = '0.5.1'
 
 repositories {
     maven {
@@ -53,7 +54,8 @@ jar {
         attributes(
                 "OmegaT-Plugins": pluginMainClass,
                 "Plugin-Version": archiveVersion,
-                "Plugin-Name": pluginName
+                "Plugin-Name": pluginName,
+                "Plugin-Author": pluginAuthor
         )
     }
 }

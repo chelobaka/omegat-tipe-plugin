@@ -49,7 +49,7 @@ public class TipeFilterTest extends TestFilterBase {
         assertEquals("list item 1", entries.get(i++));
         assertEquals("<a2>Link</a2> (description)", entries.get(i++));
         assertEquals("https://url2.org", entries.get(i++));
-        assertEquals("<e2><e2>Bad tags <s3>here</s4></e2>", entries.get(i++));
+        assertEquals("This must collapse to one <s4>string</s4>", entries.get(i++));
     }
 
     @Test
