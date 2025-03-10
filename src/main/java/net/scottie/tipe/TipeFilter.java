@@ -38,7 +38,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.jetbrains.annotations.NotNull;
 import org.omegat.core.Core;
 
 import org.omegat.core.CoreEvents;
@@ -141,7 +140,7 @@ public class TipeFilter extends AbstractFilter {
         }
 
         @Override
-        public int compareTo(@NotNull final Block that) {
+        public int compareTo(final Block that) {
             return Integer.compare(this.start, that.start);
         }
     }
