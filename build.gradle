@@ -1,48 +1,43 @@
 plugins {
     id 'java'
-    id "com.github.spotbugs" version "3.0.0"
     id 'checkstyle'
     id 'distribution'
-    id 'maven'
 }
-
-def pluginName = 'Tipe³ format support'
-def pluginAuthor = 'Lev Abashkin'
-
-// Project version
-version = '0.5.1'
 
 repositories {
-    maven {
-        url "https://dl.bintray.com/omegat-org/maven"
-    }
-    jcenter()
+    mavenCentral()
 }
-
-def compileDependencies = [
-        'org.omegat:omegat:5.8.0',
-        'commons-io:commons-io:2.4',
-        'commons-lang:commons-lang:2.6'
-]
-
-def testDependencies = [
-        'junit:junit:4.12',
-        'xmlunit:xmlunit:1.6',
-        'org.madlonkay.supertmxmerge:supertmxmerge:2.0.1'
-]
 
 dependencies {
+    implementation 'org.omegat:omegat:6.0.0'
+    implementation 'commons-io:commons-io:2.20.0'
+    implementation 'commons-lang:commons-lang:2.6'
+    implementation 'org.netbeans.api:org-openide-awt:RELEASE125'
+    implementation "com.fasterxml.jackson.core:jackson-core:2.19.2"
+    implementation "com.fasterxml.jackson.core:jackson-databind:2.19.2"
 
-    compileDependencies.each {
-        compileOnly it
-        testImplementation it
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.13.4'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.13.4'
+    testImplementation 'org.xmlunit:xmlunit-assertj3:2.10.3'
+    testImplementation 'com.j2html:j2html:1.6.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+// Internal tests task
+tasks.register('internalReport', Test) {
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+        exceptionFormat "full"
     }
-
-    testDependencies.each {
-        testImplementation it
+    useJUnitPlatform {
+        includeTags("internal")
     }
 }
 
+tasks.internalReport.setGroup('Verification')
 
 tasks.withType(JavaCompile) {
     options.compilerArgs << "-Xlint:deprecation" << "-Xlint:unchecked"
@@ -53,45 +48,40 @@ jar {
         // plugin's main class name is defined in gradle.properties file.
         attributes(
                 "OmegaT-Plugins": pluginMainClass,
-                "Plugin-Version": archiveVersion,
+                "Plugin-Version": pluginVersion,
                 "Plugin-Name": pluginName,
-                "Plugin-Author": pluginAuthor
+                "Plugin-Author": pluginAuthor,
+                "Plugin-Description": pluginDescription,
+                "Plugin-Category": "filter"
         )
     }
+
+    archiveFileName = "${rootProject.name}-${pluginVersion}.jar"
 }
 
 /* Checkstyle */
 tasks.checkstyleMain.setGroup('Verification')
 tasks.checkstyleTest.setEnabled(false)
 
-/* SpotBugs */
-spotbugs {
-    ignoreFailures = true
-}
-
-tasks.withType(com.github.spotbugs.SpotBugsTask) {
-    setGroup('Verification')
-    reports {
-        xml.enabled = false
-        html.enabled = true
-    }
-}
-tasks.spotbugsTest.setEnabled(false)
 
 artifacts {
     archives jar
 }
 
+distZip {
+    archiveFileName = "${rootProject.name}-${pluginVersion}.zip"
+}
+
 distTar {
-  compression = Compression.GZIP
+    compression = Compression.GZIP
 }
 
 distributions {
     main {
         contents {
             from('README.md', 'COPYING')
-            into('docs') {
-                from 'CHANGELOG.md'
+            from('util') {
+                into 'util'
             }
 
             from(jar) {
