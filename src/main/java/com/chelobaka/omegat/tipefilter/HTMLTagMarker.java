@@ -19,7 +19,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **************************************************************************/
 
-package net.scottie.tipe;
+package com.chelobaka.omegat.tipefilter;
 
 import org.omegat.core.data.SourceTextEntry;
 import org.omegat.gui.editor.mark.IMarker;

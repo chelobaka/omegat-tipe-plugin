@@ -29,7 +29,7 @@ package org.omegat.filters;
 import java.util.List;
 
 import org.junit.Test;
-import net.scottie.tipe.TipeFilter;
+import com.chelobaka.omegat.tipefilter.TipeFilter;
 
 import static org.junit.Assert.*;
 
