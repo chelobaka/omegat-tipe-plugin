@@ -684,7 +684,7 @@ public class TipeFilter extends AbstractFilter {
     @Override
     public Instance[] getDefaultInstances() {
         return new Instance[] {
-                new Instance(Util.SOURCE_FILENAME_MASK, "*", "*"),
+                new Instance(Util.SOURCE_FILENAME_MASK, "UTF-8", "UTF-8"),
         };
     }
 
